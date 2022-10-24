@@ -65,13 +65,12 @@ def main(folder: Path):
 
 
 if __name__ == '__main__':
-    print(len(sys.argv))
-    # if len(sys.argv) < 2:
-    #     print('Потрібно вказати шлях до папки')
-    # else:
-    folder_for_scan = Path(r'test') #sys.argv[1])
-    print(f'Start in folder {folder_for_scan.resolve()}')
-    main(folder_for_scan.resolve())
+    if len(sys.argv) < 2:
+        print('Потрібно вказати шлях до папки')
+    else:
+        folder_for_scan = Path(r'test') #sys.argv[1])
+        print(f'Start in folder {folder_for_scan.resolve()}')
+        main(folder_for_scan.resolve())
 
 
 # TODO: запускаємо:  python3 main.py `назва_папки_для_сортування`
