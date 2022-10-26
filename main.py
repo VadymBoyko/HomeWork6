@@ -41,7 +41,7 @@ def handle_folder(folder: Path):
         print(f'Помилка видалення папки {folder}')
 
 
-def main(folder: Path):
+def sort_files_by_folders(folder: Path):
     parser.scan(folder)
     for file in parser.JPEG_IMAGES:
         handle_media(file, folder / 'images' / 'JPEG')
@@ -70,7 +70,7 @@ if __name__ == '__main__':
     else:
         folder_for_scan = Path(r'test') #sys.argv[1])
         print(f'Start in folder {folder_for_scan.resolve()}')
-        main(folder_for_scan.resolve())
+        sort_files_by_folders(folder_for_scan.resolve())
 
 
 # TODO: запускаємо:  python3 main.py `назва_папки_для_сортування`
