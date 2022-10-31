@@ -35,6 +35,11 @@ def normalize(name: str) -> str:
     t_name = re.sub(r'\W', '_', t_name)
     return t_name
 
+def get_extension(filename: str) -> str:
+    # перетворюємо розширення файлу на назву папки .jpg -> JPG
+    return Path(filename).suffix[1:].upper()
+
+
 def handle_media(filename: Path, target_folder: Path):
     target_folder.mkdir(exist_ok=True, parents=True)
     filename.replace(target_folder / (normalize(filename.name.replace(filename.suffix, '')) + '.' + filename.suffix))
@@ -70,33 +75,6 @@ def handle_folder(folder: Path):
     except OSError:
         print(f'Помилка видалення папки {folder}')
 
-def sort_files_by_folders(folder: Path):
-    scan(folder)
-    for file in JPEG_IMAGES:
-        handle_media(file, folder / 'images' / 'JPEG')
-    for file in JPG_IMAGES:
-        handle_media(file, folder / 'images' / 'JPG')
-    for file in PNG_IMAGES:
-        handle_media(file, folder / 'images' / 'PNG')
-    for file in SVG_IMAGES:
-        handle_media(file, folder / 'images' / 'SVG')
-    for file in MP3_AUDIO:
-        handle_media(file, folder / 'audio' / 'MP3')
-
-    for file in MY_OTHER:
-        handle_other(file, folder / 'MY_OTHER')
-    for file in ARCHIVES:
-        handle_archive(file, folder / 'archives')
-
-    # Виконуємо реверс списку для того щоб видалити всі папки
-    for folder in FOLDERS[::-1]:
-        handle_folder(folder)
-
-def get_extension(filename: str) -> str:
-    # перетворюємо розширення файлу на назву папки .jpg -> JPG
-    return Path(filename).suffix[1:].upper()
-
-
 def scan(folder: Path) -> None:
     for item in folder.iterdir():
         # Якщо це папка то додаємо її зі списку FOLDERS і переходимо до наступного елемента папки
@@ -125,20 +103,38 @@ def scan(folder: Path) -> None:
                 UNKNOWN.add(ext)
                 MY_OTHER.append(fullname)
 
-
-
-if __name__ == '__main__':
-
+def sort_files_by_folders(folder: Path):
     for c, l in zip(CYRILLIC_SYMBOLS, TRANSLATION):
         TRANS[ord(c)] = l
         TRANS[ord(c.upper())] = l.upper()
+    scan(folder)
+    for file in JPEG_IMAGES:
+        handle_media(file, folder / 'images' / 'JPEG')
+    for file in JPG_IMAGES:
+        handle_media(file, folder / 'images' / 'JPG')
+    for file in PNG_IMAGES:
+        handle_media(file, folder / 'images' / 'PNG')
+    for file in SVG_IMAGES:
+        handle_media(file, folder / 'images' / 'SVG')
+    for file in MP3_AUDIO:
+        handle_media(file, folder / 'audio' / 'MP3')
 
+    for file in MY_OTHER:
+        handle_other(file, folder / 'MY_OTHER')
+    for file in ARCHIVES:
+        handle_archive(file, folder / 'archives')
+
+    # Виконуємо реверс списку для того щоб видалити всі папки
+    for folder in FOLDERS[::-1]:
+        handle_folder(folder)
+
+
+if __name__ == '__main__':
     if len(sys.argv) < 2:
         print('Потрібно вказати шлях до папки')
     else:
         folder_for_scan = Path(r'test')   #sys.argv[1])
         print(f'Start in folder {folder_for_scan.resolve()}')
         sort_files_by_folders(folder_for_scan.resolve())
-
 
 # TODO: запускаємо:  python3 main.py `назва_папки_для_сортування`
