@@ -128,13 +128,15 @@ def sort_files_by_folders(folder: Path):
     for folder in FOLDERS[::-1]:
         handle_folder(folder)
 
-
-if __name__ == '__main__':
+def start_proc_by_command_line():
     if len(sys.argv) < 2:
         print('Потрібно вказати шлях до папки')
     else:
         folder_for_scan = Path(r'test')   #sys.argv[1])
         print(f'Start in folder {folder_for_scan.resolve()}')
         sort_files_by_folders(folder_for_scan.resolve())
+
+if __name__ == '__main__':
+    start_proc_by_command_line()
 
 # TODO: запускаємо:  python3 main.py `назва_папки_для_сортування`
